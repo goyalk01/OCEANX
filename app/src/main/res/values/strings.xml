@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">FreshCart</string>
+    <string name="app_tagline">Groceries delivered in 30 minutes</string>
+
+    <!-- Login Fragment -->
+    <string name="login_phone_label">Enter Mobile Number</string>
+    <string name="login_phone_hint">10-digit number</string>
+    <string name="login_send_otp">Send OTP</string>
+    <string name="login_otp_label">Enter OTP sent to</string>
+    <string name="login_otp_hint">4-digit OTP</string>
+    <string name="login_verify_otp">Verify OTP</string>
+    <string name="login_resend_otp">Resend OTP</string>
+    <string name="login_terms">By continuing, you agree to our Terms &amp; Privacy Policy</string>
+    <string name="login_error_invalid_phone">Please enter a valid 10-digit Indian phone number</string>
+    <string name="login_error_invalid_otp">Incorrect OTP. Please try again</string>
+
+    <!-- Home Fragment -->
+    <string name="home_greeting">Good morning</string>
+    <string name="home_question">What would you like to order today?</string>
+    <string name="home_shop_by_category">Shop by Category</string>
+    <string name="home_popular_products">Popular Products</string>
+    <string name="home_no_products">No products found</string>
+    <string name="home_search_hint">Search for products...</string>
+
+    <!-- Cart Fragment -->
+    <string name="cart_empty_title">Your cart is empty</string>
+    <string name="cart_empty_subtitle">Add some fresh groceries to get started</string>
+    <string name="cart_browse_products">Browse Products</string>
+    <string name="cart_mrp_total">MRP Total</string>
+    <string name="cart_discount">Discount</string>
+    <string name="cart_delivery_fee">Delivery Fee</string>
+    <string name="cart_free_delivery">FREE</string>
+    <string name="cart_total_amount">Total Amount</string>
+    <string name="cart_saving">You\'re saving ₹%1$s on this order!</string>
+    <string name="cart_proceed_checkout">Proceed to Checkout</string>
+    <string name="cart_remove_confirm">Are you sure you want to remove this item?</string>
+    <string name="cart_item_removed">Item removed</string>
+    <string name="cart_undo">UNDO</string>
+
+    <!-- Checkout Fragment -->
+    <string name="checkout_title">Checkout</string>
+    <string name="checkout_delivery_address">Delivery Address</string>
+    <string name="checkout_full_name">Full Name</string>
+    <string name="checkout_full_name_hint">Enter your name</string>
+    <string name="checkout_phone_number">Phone Number</string>
+    <string name="checkout_flat_number">Flat/House No. &amp; Building</string>
+    <string name="checkout_flat_number_hint">e.g., Apt 101, Sunshine Complex</string>
+    <string name="checkout_area_locality">Area/Locality</string>
+    <string name="checkout_area_locality_hint">e.g., Bandra, Colaba</string>
+    <string name="checkout_city">City</string>
+    <string name="checkout_pincode">Pincode</string>
+    <string name="checkout_pincode_hint">6-digit code</string>
+    <string name="checkout_payment_method">Payment Method</string>
+    <string name="checkout_payment_cod">Cash on Delivery</string>
+    <string name="checkout_payment_online">Pay Online (UPI / Card)</string>
+    <string name="checkout_order_summary">Order Summary</string>
+    <string name="checkout_place_order">Place Order</string>
+    <string name="checkout_validation_error">Please fill all fields correctly</string>
+
+    <!-- Order Success Fragment -->
+    <string name="order_success_title">Order Placed Successfully! 🎉</string>
+    <string name="order_success_subtitle">Your order is on its way!</string>
+    <string name="order_success_order_id">Order ID</string>
+    <string name="order_success_est_delivery">Estimated Delivery</string>
+    <string name="order_success_payment_method">Payment Method</string>
+    <string name="order_success_delivery_address">Delivery Address</string>
+    <string name="order_success_total_paid">Total Paid</string>
+    <string name="order_placed">Order Placed ✓</string>
+    <string name="out_for_delivery">Out for Delivery 🚴</string>
+    <string name="delivered">Delivered 🏠</string>
+    <string name="order_track_button">Track Order</string>
+    <string name="order_continue_shopping">Continue Shopping</string>
+    <string name="order_tracking_message">Tracking feature coming soon!</string>
+
+    <!-- Bottom Navigation -->
+    <string name="nav_home">Home</string>
+    <string name="nav_cart">Cart</string>
+    <string name="nav_profile">Profile</string>
+
+    <!-- Generic -->
+    <string name="close">Close</string>
+    <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok">OK</string>
+    <string name="error">Error</string>
+    <string name="loading">Loading...</string>
+</resources>

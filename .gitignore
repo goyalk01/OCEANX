@@ -1,0 +1,80 @@
+# Gradle and build files
+/build/
+/.gradle/
+*.class
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+
+# Android Studio
+/.idea/
+/.settings/
+.classpath
+.project
+*.iml
+*.iws
+*.ipr
+local.properties
+
+# IDE-specific files
+.DS_Store
+.vscode/
+*.swp
+*.swo
+*~
+.gradle/
+.idea/
+build/
+*.apk
+*.ap_
+*.dex
+*.class
+bin/
+gen/
+out/
+
+# Signing files
+*.keystore
+*.jks
+
+# Room schemas (generated)
+/schemas/
+
+# User-specific files
+*.log
+
+# Keystore
+keystore.properties
+
+# Release builds
+app/release/
+
+# Kotlin/Java compiler
+*.kt.bak
+*.java.bak
+
+# Misc
+.AppleDouble
+.LSOverride
+Thumbs.db
+
+# Gradle wrapper binaries and distribution zips
+gradle-*/
+*.zip
+
+# Local environment files
+.env
+.env.*
+
+# IntelliJ / Android Studio workspace
+.idea/
+*.iml
+
+# Windows files
+ehthumbs.db
+Desktop.ini
+
+# Exclude any extracted gradle distribution directories
+gradle-*/

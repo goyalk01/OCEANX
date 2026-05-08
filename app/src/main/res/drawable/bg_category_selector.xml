@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Selected (filled) category chip -->
+    <item android:state_selected="true">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/primary" />
+            <corners android:radius="@dimen/card_corner_radius" />
+        </shape>
+    </item>
+    <!-- Unselected (outlined) category chip -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@color/surface" />
+            <stroke android:width="@dimen/spacing_xs" android:color="@color/divider" />
+            <corners android:radius="@dimen/card_corner_radius" />
+        </shape>
+    </item>
+</selector>

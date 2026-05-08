@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/spacing_lg"
+        android:gravity="center_horizontal">
+
+        <!-- App Logo -->
+        <ImageView
+            android:id="@+id/appLogo"
+            android:layout_width="@dimen/image_large"
+            android:layout_height="@dimen/image_large"
+            android:layout_margin="@dimen/spacing_xl"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/ic_launcher_foreground"
+            android:scaleType="centerInside" />
+
+        <!-- App Name -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/app_name"
+            android:textSize="@dimen/text_size_headline"
+            android:textStyle="bold"
+            android:textColor="@color/text_primary"
+            android:layout_marginBottom="@dimen/spacing_sm" />
+
+        <!-- Tagline -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/app_tagline"
+            android:textSize="@dimen/text_size_md"
+            android:textColor="@color/text_secondary"
+            android:layout_marginBottom="@dimen/spacing_xl" />
+
+        <!-- Phone Number Input -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/phoneInputLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/login_phone_label"
+            android:layout_marginBottom="@dimen/spacing_md">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/phoneEditText"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/text_input_height"
+                android:inputType="phone"
+                android:maxLength="10"
+                android:hint="@string/login_phone_hint" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Send OTP Button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/sendOtpButton"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/button_height"
+            android:text="@string/login_send_otp"
+            android:layout_marginBottom="@dimen/spacing_lg"
+            android:textSize="@dimen/text_size_md"
+            android:textColor="@color/on_primary"
+            app:backgroundTint="@color/primary"
+            app:cornerRadius="@dimen/button_corner_radius" />
+
+        <!-- OTP Section (initially hidden) -->
+        <LinearLayout
+            android:id="@+id/otpSection"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <!-- OTP Label -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/login_otp_label"
+                android:textSize="@dimen/text_size_md"
+                android:textColor="@color/text_primary"
+                android:layout_marginBottom="@dimen/spacing_md" />
+
+            <!-- OTP Input -->
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/login_otp_label"
+                android:layout_marginBottom="@dimen/spacing_md">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/otpEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/text_input_height"
+                    android:inputType="numberPassword"
+                    android:maxLength="4"
+                    android:hint="@string/login_otp_hint" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Verify OTP Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/verifyOtpButton"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/button_height"
+                android:text="@string/login_verify_otp"
+                android:layout_marginBottom="@dimen/spacing_md"
+                android:textSize="@dimen/text_size_md"
+                app:backgroundTint="@color/primary"
+                app:cornerRadius="@dimen/button_corner_radius" />
+
+            <!-- Resend OTP Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/resendOtpButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/login_resend_otp"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_marginBottom="@dimen/spacing_lg" />
+
+        </LinearLayout>
+
+        <!-- Terms & Conditions -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/login_terms"
+            android:textSize="@dimen/text_size_sm"
+            android:textColor="@color/text_secondary"
+            android:layout_marginTop="@dimen/spacing_lg"
+            android:gravity="center" />
+
+    </LinearLayout>
+
+</ScrollView>
