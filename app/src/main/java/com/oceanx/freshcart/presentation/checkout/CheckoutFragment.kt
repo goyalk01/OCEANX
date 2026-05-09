@@ -88,15 +88,13 @@ class CheckoutFragment : Fragment(R.layout.fragment_checkout) {
                             }
                             is UiState.Success -> {
                                 state.data?.let { order ->
-                                    findNavController().navigate(
-                                        R.id.action_checkoutFragment_to_orderSuccessFragment,
-                                        Bundle().apply {
-                                            putString("orderId", order.orderId)
-                                            putDouble("totalAmount", order.totalAmount)
-                                            putString("deliveryAddress", order.deliveryAddress)
-                                            putString("paymentMethod", order.paymentMethod)
-                                        }
+                                    val action = CheckoutFragmentDirections.actionCheckoutFragmentToOrderSuccessFragment(
+                                        orderId = order.orderId,
+                                        totalAmount = order.totalAmount.toFloat(),
+                                        deliveryAddress = order.deliveryAddress,
+                                        paymentMethod = order.paymentMethod
                                     )
+                                    findNavController().navigate(action)
                                 }
                             }
                             is UiState.Error -> {

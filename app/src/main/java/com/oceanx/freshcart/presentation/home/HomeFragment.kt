@@ -79,7 +79,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         binding.productRecyclerView.apply {
             layoutManager = GridLayoutManager(context, 2)
             adapter = productAdapter
-            setHasFixedSize(false)
+            setHasFixedSize(true)
         }
     }
 

@@ -47,7 +47,7 @@ class OrderSuccessFragment : Fragment(R.layout.fragment_order_success) {
      */
     private fun displayOrderDetails() {
         binding.orderIdValue.text = args.orderId
-        binding.totalAmountValue.text = args.totalAmount.toCurrencyString()
+        binding.totalAmountValue.text = args.totalAmount.toDouble().toCurrencyString()
         binding.deliveryAddressValue.text = args.deliveryAddress
         binding.paymentMethodValue.text = args.paymentMethod
     }

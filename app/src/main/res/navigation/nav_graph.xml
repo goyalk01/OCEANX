@@ -68,7 +68,7 @@
             app:type="string" />
         <argument
             android:name="totalAmount"
-            app:type="double" />
+            app:type="float" />
         <argument
             android:name="deliveryAddress"
             app:type="string" />

@@ -13,6 +13,14 @@ A production-grade Android grocery delivery application built in **100% Kotlin**
 **Architecture:** Clean Architecture + MVVM  
 **UI Framework:** Material Design 3 (XML Layouts)
 
+## 📸 App Showcase
+
+**[🎥 Watch Full App Demo Video Here](https://youtube.com/shorts/placeholder)**
+
+| Login Screen | Home Screen | Cart Screen | Checkout Screen | Order Success |
+| :---: | :---: | :---: | :---: | :---: |
+| <img src="https://via.placeholder.com/250x500.png?text=Login" width="180"/> | <img src="https://via.placeholder.com/250x500.png?text=Home" width="180"/> | <img src="https://via.placeholder.com/250x500.png?text=Cart" width="180"/> | <img src="https://via.placeholder.com/250x500.png?text=Checkout" width="180"/> | <img src="https://via.placeholder.com/250x500.png?text=Success" width="180"/> |
+
 ---
 
 ## 🏗️ Architecture Overview
