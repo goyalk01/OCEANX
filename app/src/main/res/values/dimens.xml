@@ -44,4 +44,11 @@
 
     <!-- RecyclerView Item Spacing -->
     <dimen name="grid_spacing">8dp</dimen>
+
+    <!-- Elevation -->
+    <dimen name="elevation_card">2dp</dimen>
+    <dimen name="elevation_toolbar">4dp</dimen>
+
+    <!-- Success Screen -->
+    <dimen name="success_icon_size">120dp</dimen>
 </resources>

@@ -5,7 +5,9 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.oceanx.freshcart.R
 import com.oceanx.freshcart.databinding.FragmentLoginBinding
@@ -25,21 +27,23 @@ import kotlinx.coroutines.launch
  */
 class LoginFragment : Fragment(R.layout.fragment_login) {
 
-    private lateinit var binding: FragmentLoginBinding
-    private lateinit var viewModel: LoginViewModel
+    private var _binding: FragmentLoginBinding? = null
+    private val binding get() = _binding!!
+
+    /**
+     * ViewModel instantiation using the `by viewModels` delegate with a custom factory.
+     * This is the correct, lifecycle-aware way to create ViewModels that have constructor
+     * dependencies (SharedPreferences in this case).
+     */
+    private val viewModel: LoginViewModel by viewModels {
+        val sharedPreferences = requireContext()
+            .getSharedPreferences(Constants.SHARED_PREF_NAME, Context.MODE_PRIVATE)
+        LoginViewModelFactory(sharedPreferences)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        binding = FragmentLoginBinding.bind(view)
-
-        // Initialize ViewModel with SharedPreferences
-        val sharedPreferences = requireContext()
-            .getSharedPreferences(Constants.SHARED_PREF_NAME, Context.MODE_PRIVATE)
-        
-        val viewModelFactory = LoginViewModelFactory(sharedPreferences)
-        val factory by lazy { viewModelFactory }
-        viewModel = ViewModels(factory).create(LoginViewModel::class.java)
+        _binding = FragmentLoginBinding.bind(view)
 
         // Check if already logged in
         if (viewModel.isLoggedIn()) {
@@ -56,7 +60,6 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
      */
     private fun setupUI() {
         binding.sendOtpButton.setOnClickListener {
-            val phone = binding.phoneEditText.text.toString().trim()
             if (viewModel.sendOtp()) {
                 binding.otpSection.visibility = View.VISIBLE
                 binding.phoneInputLayout.isErrorEnabled = false
@@ -86,14 +89,18 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     }
 
     /**
-     * Observe ViewModel state changes.
+     * Observe ViewModel state changes using lifecycle-safe repeatOnLifecycle.
+     * This replaces the deprecated launchWhenStarted and ensures collection
+     * is properly cancelled when the view goes below STARTED state.
      */
     private fun observeViewModel() {
         viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.errorMessage.collect { error ->
-                if (error != null) {
-                    binding.phoneInputLayout.error = error
-                    requireContext().toast(error)
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.errorMessage.collect { error ->
+                    if (error != null) {
+                        binding.phoneInputLayout.error = error
+                        requireContext().toast(error)
+                    }
                 }
             }
         }
@@ -105,23 +112,27 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     private fun navigateToHome() {
         findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
     }
-}
 
-/**
- * Factory for creating LoginViewModel with dependencies.
- */
-class LoginViewModelFactory(private val sharedPreferences: android.content.SharedPreferences) :
-    androidx.lifecycle.ViewModelProvider.Factory {
-    override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T {
-        return LoginViewModel(sharedPreferences) as T
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
 
 /**
- * Helper to create ViewModels using a factory.
+ * Factory for creating LoginViewModel with dependencies.
+ * Required because LoginViewModel has a constructor parameter (SharedPreferences).
+ * Without this factory, ViewModelProvider cannot instantiate the ViewModel.
  */
-class ViewModels(private val factory: androidx.lifecycle.ViewModelProvider.Factory) {
-    inline fun <reified T : androidx.lifecycle.ViewModel> create(): T {
-        return factory.create(T::class.java) as T
+class LoginViewModelFactory(
+    private val sharedPreferences: android.content.SharedPreferences
+) : androidx.lifecycle.ViewModelProvider.Factory {
+
+    @Suppress("UNCHECKED_CAST")
+    override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(LoginViewModel::class.java)) {
+            return LoginViewModel(sharedPreferences) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
     }
 }

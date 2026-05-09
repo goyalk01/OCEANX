@@ -5,28 +5,24 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.oceanx.freshcart.data.model.CartItem
 import com.oceanx.freshcart.data.model.Product
 import com.oceanx.freshcart.databinding.ItemProductBinding
 import com.oceanx.freshcart.utils.toCurrencyString
 
 /**
  * RecyclerView adapter for products in the home screen.
- * Displays product cards in a grid or list layout.
- * Uses DiffUtil for efficient list updates.
+ * Displays product cards in a grid layout using ListAdapter + DiffUtil
+ * for efficient, animated list updates.
  *
- * Shows either:
- * - "+" Add button if product not in cart
- * - Quantity controls (+/-) if product already in cart
+ * Currently shows a simple "Add" button. In a full implementation,
+ * the button would toggle to quantity controls when the product is in the cart.
  *
  * @param onAddClick Callback when "Add" button is tapped
- * @param onQuantityChange Callback when quantity +/- is tapped
- * @param getCartItem Function to get current cart item (quantity) if it exists
+ * @param onQuantityChange Callback when quantity +/- is tapped (product, newQuantity)
  */
 class ProductAdapter(
     private val onAddClick: (Product) -> Unit,
-    private val onQuantityChange: (Product, Int) -> Unit,
-    private val getCartItem: suspend (Int) -> CartItem?
+    private val onQuantityChange: (Product, Int) -> Unit
 ) : ListAdapter<Product, ProductAdapter.ProductViewHolder>(ProductDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
@@ -35,7 +31,7 @@ class ProductAdapter(
             parent,
             false
         )
-        return ProductViewHolder(binding, onAddClick, onQuantityChange)
+        return ProductViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
@@ -43,9 +39,7 @@ class ProductAdapter(
     }
 
     inner class ProductViewHolder(
-        private val binding: ItemProductBinding,
-        private val onAddClick: (Product) -> Unit,
-        private val onQuantityChange: (Product, Int) -> Unit
+        private val binding: ItemProductBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(product: Product) {
@@ -53,7 +47,7 @@ class ProductAdapter(
             binding.productUnit.text = product.unit
             binding.productPrice.text = product.price.toCurrencyString()
 
-            // TODO: Load image using Glide
+            // TODO: Load image using Glide when product images are available
             // Glide.with(itemView).load(product.imageResId).into(binding.productImage)
 
             binding.addButton.setOnClickListener {
@@ -72,15 +66,12 @@ class ProductAdapter(
                 onQuantityChange(product, currentQty + 1)
             }
         }
-
-        /**
-         * Update the quantity display.
-         */
-        fun setQuantity(quantity: Int) {
-            binding.quantityText.text = quantity.toString()
-        }
     }
 
+    /**
+     * DiffUtil callback for efficient product list updates.
+     * Compares by product ID (stable identity) and full equality (content changes).
+     */
     private class ProductDiffCallback : DiffUtil.ItemCallback<Product>() {
         override fun areItemsTheSame(oldItem: Product, newItem: Product): Boolean {
             return oldItem.id == newItem.id

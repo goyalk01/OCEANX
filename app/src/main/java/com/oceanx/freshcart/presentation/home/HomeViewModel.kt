@@ -12,9 +12,10 @@ import com.oceanx.freshcart.presentation.common.UiState
 import com.oceanx.freshcart.utils.Constants
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 /**
@@ -26,7 +27,7 @@ import kotlinx.coroutines.launch
  * - categories: All available categories
  * - selectedCategory: Currently selected category filter
  * - searchQuery: Current search query
- * - cartBadgeCount: Number of items in cart
+ * - cartBadgeCount: Number of items in cart (for toolbar badge)
  * - uiState: Loading/Success/Error state for the UI
  */
 class HomeViewModel(
@@ -46,7 +47,17 @@ class HomeViewModel(
     private val _searchQuery = MutableStateFlow("")
     val searchQuery: StateFlow<String> = _searchQuery
 
+    /**
+     * Cart badge count converted from a cold Flow (Room) to a hot StateFlow.
+     * Uses stateIn() with WhileSubscribed to share the subscription and
+     * automatically cancel when no collectors are active.
+     */
     val cartBadgeCount: StateFlow<Int> = cartRepository.getCartItemCount()
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000L),
+            initialValue = 0
+        )
 
     private val _uiState = MutableStateFlow<UiState<String>>(UiState.Success(""))
     val uiState: StateFlow<UiState<String>> = _uiState
@@ -54,12 +65,12 @@ class HomeViewModel(
     init {
         loadCategories()
         loadAllProducts()
-        
+
         // Set up reactive search with debounce
         viewModelScope.launch {
             _searchQuery
                 .debounce(Constants.SEARCH_DEBOUNCE_MS)
-                .collect { query ->
+                .collect { _ ->
                     filterProducts()
                 }
         }
@@ -101,7 +112,7 @@ class HomeViewModel(
 
     /**
      * Update search query.
-     * Automatically triggers filtering with debounce.
+     * Automatically triggers filtering with debounce via the init block collector.
      */
     fun onSearchQueryChanged(query: String) {
         _searchQuery.value = query
@@ -109,6 +120,7 @@ class HomeViewModel(
 
     /**
      * Filter products based on selected category and search query.
+     * Applies both filters sequentially: category first, then search text.
      */
     private fun filterProducts() {
         val allProducts = ProductDataSource.getProducts()
@@ -135,7 +147,7 @@ class HomeViewModel(
 
     /**
      * Add a product to cart.
-     * Called when user taps the "+" button on a product.
+     * Called when user taps the "+" button on a product card.
      */
     fun addToCart(product: Product) {
         viewModelScope.launch {
@@ -149,7 +161,7 @@ class HomeViewModel(
 
     /**
      * Update quantity of a product in cart.
-     * Called when user changes quantity via +/- buttons.
+     * Called when user changes quantity via +/- buttons on product card.
      */
     fun updateCartQuantity(productId: Int, newQuantity: Int) {
         viewModelScope.launch {
@@ -191,13 +203,5 @@ class HomeViewModel(
             in 12..16 -> "Good afternoon"
             else -> "Good evening"
         }
-    }
-
-    /**
-     * Get user's phone number from SharedPreferences (saved during login).
-     */
-    fun getUserPhoneName(): String {
-        // In real app, would retrieve from SharedPreferences
-        return "User"
     }
 }

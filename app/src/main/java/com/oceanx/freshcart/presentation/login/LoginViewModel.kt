@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.oceanx.freshcart.utils.Constants
+import com.oceanx.freshcart.utils.ValidationUtils
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -96,14 +97,11 @@ class LoginViewModel(private val sharedPreferences: SharedPreferences) : ViewMod
     }
 
     /**
-     * Validates phone number format (Indian phone numbers).
-     * Rules: 10 digits, starts with 6, 7, 8, or 9
+     * Delegates phone validation to shared ValidationUtils.
+     * Keeps validation rules consistent across login and checkout screens.
      */
     private fun isValidPhone(phone: String): Boolean {
-        if (phone.length != Constants.PHONE_LENGTH) return false
-        if (!phone.all { it.isDigit() }) return false
-        val firstDigit = phone.first().digitToInt()
-        return firstDigit in 6..9
+        return ValidationUtils.isValidIndianPhone(phone)
     }
 
     /**

@@ -13,7 +13,7 @@
         android:orientation="vertical">
 
         <!-- Toolbar -->
-        <com.google.android.material.appbarayout.AppBarLayout
+        <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:elevation="@dimen/spacing_md">
@@ -54,7 +54,7 @@
 
             </LinearLayout>
 
-        </com.google.android.material.appbarayout.AppBarLayout>
+        </com.google.android.material.appbar.AppBarLayout>
 
         <!-- Search View -->
         <androidx.appcompat.widget.SearchView
@@ -62,7 +62,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/spacing_md"
-            android:background="@drawable/bg_button_primary"
+            android:background="@drawable/bg_search_bar"
+            app:queryHint="@string/home_search_hint"
             app:iconifiedByDefault="false" />
 
         <!-- Greeting -->

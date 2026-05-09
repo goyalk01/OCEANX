@@ -84,5 +84,13 @@
     <string name="cancel">Cancel</string>
     <string name="ok">OK</string>
     <string name="error">Error</string>
-    <string name="loading">Loading...</string>
+    <string name="loading">Loading…</string>
+    <string name="add_label">Add</string>
+    <string name="remove_label">Remove</string>
+    <string name="estimated_delivery_time">30–40 min</string>
+
+    <!-- Content Descriptions -->
+    <string name="product_image_desc">Product image</string>
+    <string name="cart_item_image_desc">Cart item image</string>
+    <string name="success_checkmark_desc">Order placed successfully</string>
 </resources>

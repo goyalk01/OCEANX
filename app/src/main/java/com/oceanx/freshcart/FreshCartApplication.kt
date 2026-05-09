@@ -28,6 +28,7 @@ class FreshCartApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        instance = this
         // App initialization code here
         // - Initialize analytics
         // - Set up crash reporting
@@ -40,15 +41,10 @@ class FreshCartApplication : Application() {
 
         /**
          * Get the application instance (singleton).
+         * Safe to call after Application.onCreate() completes.
          */
         fun getInstance(): FreshCartApplication {
             return instance ?: error("FreshCartApplication not initialized")
         }
-    }
-
-    override fun onCreate() {
-        super.onCreate()
-        instance = this
-        // Initialize app-wide resources
     }
 }

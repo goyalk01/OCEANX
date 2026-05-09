@@ -5,7 +5,7 @@
     android:layout_height="@dimen/product_card_height"
     android:layout_margin="@dimen/grid_spacing"
     app:cardCornerRadius="@dimen/card_corner_radius"
-    app:cardElevation="@dimen/spacing_sm">
+    app:cardElevation="2dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -18,8 +18,9 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/product_image_height"
             android:src="@drawable/ic_launcher_foreground"
-            android:contentDescription="Product"
-            android:scaleType="centerCrop" />
+            android:contentDescription="@string/home_popular_products"
+            android:scaleType="centerCrop"
+            android:background="@color/background" />
 
         <!-- Product Details -->
         <LinearLayout
@@ -33,7 +34,6 @@
                 android:id="@+id/productName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Product Name"
                 android:textSize="@dimen/text_size_md"
                 android:textStyle="bold"
                 android:textColor="@color/text_primary"
@@ -44,7 +44,6 @@
                 android:id="@+id/productUnit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="1 kg"
                 android:textSize="@dimen/text_size_sm"
                 android:textColor="@color/text_secondary" />
 
@@ -53,14 +52,13 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:orientation="horizontal"
-                android:gravity="bottom">
+                android:gravity="bottom|center_vertical">
 
                 <TextView
                     android:id="@+id/productPrice"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="₹0"
                     android:textSize="@dimen/text_size_lg"
                     android:textStyle="bold"
                     android:textColor="@color/primary" />
@@ -69,12 +67,12 @@
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/addButton"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="+"
-                    android:textSize="@dimen/text_size_lg"
+                    android:layout_height="@dimen/icon_large"
+                    android:text="@string/add_label"
+                    android:textSize="@dimen/text_size_sm"
+                    android:minWidth="@dimen/spacing_xl"
                     app:backgroundTint="@color/primary"
-                    app:cornerRadius="@dimen/button_corner_radius"
-                    app:icon="@drawable/ic_launcher_foreground" />
+                    app:cornerRadius="@dimen/button_corner_radius" />
 
                 <!-- Quantity Controls (initially hidden) -->
                 <LinearLayout
@@ -86,28 +84,35 @@
                     android:gravity="center_vertical">
 
                     <com.google.android.material.button.MaterialButton
-                        android:id="@+id/quantityMinus"
+                        android:id="@+id/quantityMinusButton"
                         style="@style/Widget.MaterialComponents.Button.TextButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="-" />
+                        android:layout_width="@dimen/icon_large"
+                        android:layout_height="@dimen/icon_large"
+                        android:text="−"
+                        android:minWidth="0dp"
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp" />
 
                     <TextView
                         android:id="@+id/quantityText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="1"
                         android:textSize="@dimen/text_size_md"
                         android:textStyle="bold"
-                        android:layout_marginStart="@dimen/spacing_sm"
-                        android:layout_marginEnd="@dimen/spacing_sm" />
+                        android:minWidth="@dimen/icon_medium"
+                        android:gravity="center"
+                        android:layout_marginStart="@dimen/spacing_xs"
+                        android:layout_marginEnd="@dimen/spacing_xs" />
 
                     <com.google.android.material.button.MaterialButton
-                        android:id="@+id/quantityPlus"
+                        android:id="@+id/quantityPlusButton"
                         style="@style/Widget.MaterialComponents.Button.TextButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="+" />
+                        android:layout_width="@dimen/icon_large"
+                        android:layout_height="@dimen/icon_large"
+                        android:text="+"
+                        android:minWidth="0dp"
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp" />
 
                 </LinearLayout>
 

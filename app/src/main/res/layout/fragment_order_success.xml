@@ -7,13 +7,13 @@
     android:gravity="center_horizontal"
     android:background="@color/surface">
 
-    <!-- Success Checkmark Animation -->
+    <!-- Success Checkmark -->
     <ImageView
         android:id="@+id/successCheckmark"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:src="@drawable/ic_launcher_foreground"
-        android:contentDescription="@string/order_success_title"
+        android:layout_width="@dimen/success_icon_size"
+        android:layout_height="@dimen/success_icon_size"
+        android:src="@drawable/ic_check_circle"
+        android:contentDescription="@string/success_checkmark_desc"
         android:layout_marginTop="@dimen/spacing_xl" />
 
     <!-- Success Title -->
@@ -67,7 +67,7 @@
                     android:id="@+id/orderIdValue"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="ORD#0000"
+                    android:text=""
                     android:textColor="@color/text_primary"
                     android:textStyle="bold" />
 
@@ -89,7 +89,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="30-40 min"
+                    android:text="@string/estimated_delivery_time"
                     android:textColor="@color/text_primary" />
 
             </LinearLayout>
@@ -111,7 +111,7 @@
                     android:id="@+id/paymentMethodValue"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="COD"
+                    android:text=""
                     android:textColor="@color/text_primary" />
 
             </LinearLayout>
@@ -133,7 +133,7 @@
                     android:id="@+id/deliveryAddressValue"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Address..."
+                    android:text=""
                     android:textColor="@color/text_primary"
                     android:maxLines="2"
                     android:ellipsize="end" />
@@ -164,7 +164,7 @@
                     android:id="@+id/totalAmountValue"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="₹0"
+                    android:text=""
                     android:textSize="@dimen/text_size_lg"
                     android:textStyle="bold"
                     android:textColor="@color/success" />

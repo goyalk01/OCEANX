@@ -7,12 +7,12 @@ import com.oceanx.freshcart.domain.usecase.GetCartTotalUseCase
 import com.oceanx.freshcart.domain.usecase.PlaceOrderUseCase
 import com.oceanx.freshcart.presentation.common.UiState
 import com.oceanx.freshcart.utils.Constants
+import com.oceanx.freshcart.utils.ValidationUtils
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import java.util.regex.Pattern
 
 /**
  * ViewModel for CheckoutFragment.
@@ -63,9 +63,20 @@ class CheckoutViewModel(
     // Bill
     val billBreakdown: Flow<GetCartTotalUseCase.BillBreakdown> = getCartTotalUseCase()
 
-    // Order Status
-    private val _orderPlacedState = MutableStateFlow<UiState<Order>>(UiState.Success(null as Order?))
-    val orderPlacedState: StateFlow<UiState<Order>> = _orderPlacedState
+    // Cached total from bill breakdown observation
+    private var cachedTotalAmount: Double = 0.0
+
+    /**
+     * Order placement state.
+     *
+     * Uses UiState<Order?> with an initial Success(null) to represent the "idle" state.
+     * - Success(null) = idle, no order placed yet
+     * - Loading = order is being placed
+     * - Success(order) = order placed successfully
+     * - Error = order placement failed
+     */
+    private val _orderPlacedState = MutableStateFlow<UiState<Order?>>(UiState.Success(null))
+    val orderPlacedState: StateFlow<UiState<Order?>> = _orderPlacedState
 
     // Update Methods
     fun setFullName(name: String) {
@@ -103,40 +114,42 @@ class CheckoutViewModel(
     }
 
     /**
-     * Validates all form fields.
+     * Cache the total amount from bill breakdown observation in the Fragment.
+     * This avoids needing to re-collect the Flow when placing the order.
+     */
+    fun setTotalAmount(amount: Double) {
+        cachedTotalAmount = amount
+    }
+
+    /**
+     * Validates all form fields using centralized ValidationUtils.
      * Updates _allFieldsValid and _validationErrors StateFlows.
      */
     private fun validateFields() {
         val errors = mutableMapOf<String, String>()
 
         // Validate Full Name
-        if (_fullName.value.isEmpty()) {
-            errors["fullName"] = "Name is required"
-        } else if (_fullName.value.length < 3) {
-            errors["fullName"] = "Name must be at least 3 characters"
-        } else if (!_fullName.value.all { it.isLetter() || it.isWhitespace() }) {
-            errors["fullName"] = "Name should contain only letters"
+        ValidationUtils.validateName(_fullName.value)?.let {
+            errors["fullName"] = it
         }
 
         // Validate Phone Number
         if (_phoneNumber.value.isEmpty()) {
             errors["phoneNumber"] = "Phone number is required"
-        } else if (!isValidPhone(_phoneNumber.value)) {
+        } else if (!ValidationUtils.isValidIndianPhone(_phoneNumber.value)) {
             errors["phoneNumber"] = "Enter a valid 10-digit Indian phone number"
         }
 
         // Validate Address
         val fullAddress = "${_flatNumber.value} ${_areaLocality.value}"
-        if (fullAddress.trim().isEmpty()) {
-            errors["address"] = "Address is required"
-        } else if (fullAddress.trim().length < 10) {
-            errors["address"] = "Address must be at least 10 characters"
+        ValidationUtils.validateAddress(fullAddress)?.let {
+            errors["address"] = it
         }
 
         // Validate Pincode
         if (_pincode.value.isEmpty()) {
             errors["pincode"] = "Pincode is required"
-        } else if (_pincode.value.length != 6 || !_pincode.value.all { it.isDigit() }) {
+        } else if (!ValidationUtils.isValidPincode(_pincode.value)) {
             errors["pincode"] = "Pincode must be exactly 6 digits"
         }
 
@@ -145,20 +158,10 @@ class CheckoutViewModel(
     }
 
     /**
-     * Validates phone number format (Indian phone numbers).
-     */
-    private fun isValidPhone(phone: String): Boolean {
-        if (phone.length != Constants.PHONE_LENGTH) return false
-        if (!phone.all { it.isDigit() }) return false
-        val firstDigit = phone.first().digitToInt()
-        return firstDigit in 6..9
-    }
-
-    /**
-     * Place the order.
+     * Place the order using the cached total amount from bill breakdown.
      * Shows loading state, simulates API delay, then navigates.
      */
-    fun placeOrder(totalAmount: Double) {
+    fun placeOrder() {
         if (!_allFieldsValid.value) {
             validateFields()
             return
@@ -174,7 +177,7 @@ class CheckoutViewModel(
                 val request = PlaceOrderUseCase.PlaceOrderRequest(
                     deliveryAddress = getFullAddress(),
                     paymentMethod = _paymentMethod.value,
-                    totalAmount = totalAmount
+                    totalAmount = cachedTotalAmount
                 )
 
                 val order = placeOrderUseCase(request)

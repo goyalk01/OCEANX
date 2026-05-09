@@ -1,19 +1,18 @@
 package com.oceanx.freshcart.presentation
 
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
-import com.google.android.material.badge.BadgeDrawable
 import com.oceanx.freshcart.FreshCartApplication
 import com.oceanx.freshcart.R
 import com.oceanx.freshcart.databinding.ActivityMainBinding
 import com.oceanx.freshcart.domain.repository.CartRepository
-import com.oceanx.freshcart.presentation.login.LoginViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 /**
@@ -25,13 +24,24 @@ import kotlinx.coroutines.launch
  * - Set up navigation
  * - Display bottom navigation (after login)
  * - Update cart badge on bottom nav
- * - Check login state and redirect appropriately
+ * - Hide bottom nav on screens where it shouldn't appear (login, checkout, order success)
  */
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
     private lateinit var cartRepository: CartRepository
+
+    /**
+     * Fragments where the bottom navigation should be hidden.
+     * This prevents the bottom nav from appearing on login, checkout,
+     * and order success screens for a cleaner UX.
+     */
+    private val hideBottomNavDestinations = setOf(
+        R.id.loginFragment,
+        R.id.checkoutFragment,
+        R.id.orderSuccessFragment
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,6 +61,8 @@ class MainActivity : AppCompatActivity() {
 
     /**
      * Set up the navigation controller and connect to bottom navigation.
+     * Also sets up a destination change listener to show/hide bottom nav
+     * based on the current fragment.
      */
     private fun setupNavigation() {
         val navHostFragment = supportFragmentManager
@@ -63,40 +75,34 @@ class MainActivity : AppCompatActivity() {
             navController
         )
 
-        // Hide bottom nav initially (show only after login)
-        binding.bottomNavigationView.setOnItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.homeFragment -> {
-                    navController.navigate(R.id.homeFragment)
-                    true
-                }
-                R.id.cartFragment -> {
-                    navController.navigate(R.id.cartFragment)
-                    true
-                }
-                R.id.profileFragment -> {
-                    // Placeholder for profile
-                    true
-                }
-                else -> false
-            }
+        // Show/hide bottom nav based on current destination
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            binding.bottomNavigationView.visibility =
+                if (destination.id in hideBottomNavDestinations) View.GONE else View.VISIBLE
         }
     }
 
     /**
      * Observe cart item count and update the badge on the cart menu item.
+     *
+     * Uses lifecycleScope + repeatOnLifecycle for lifecycle safety.
+     * The previous implementation used `CoroutineScope(Dispatchers.Main)` which
+     * creates an unmanaged scope — coroutines launched in it survive activity
+     * destruction, causing memory leaks and potential crashes.
      */
     private fun observeCartBadge() {
-        CoroutineScope(Dispatchers.Main).launch {
-            cartRepository.getCartItemCount().collect { count ->
-                val badgeDrawable = binding.bottomNavigationView
-                    .getOrCreateBadge(R.id.cartFragment)
-                
-                if (count > 0) {
-                    badgeDrawable.isVisible = true
-                    badgeDrawable.number = count
-                } else {
-                    badgeDrawable.isVisible = false
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                cartRepository.getCartItemCount().collect { count ->
+                    val badgeDrawable = binding.bottomNavigationView
+                        .getOrCreateBadge(R.id.cartFragment)
+
+                    if (count > 0) {
+                        badgeDrawable.isVisible = true
+                        badgeDrawable.number = count
+                    } else {
+                        badgeDrawable.isVisible = false
+                    }
                 }
             }
         }

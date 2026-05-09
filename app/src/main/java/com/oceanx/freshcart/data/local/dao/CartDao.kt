@@ -12,7 +12,8 @@ import kotlinx.coroutines.flow.Flow
 /**
  * Data Access Object (DAO) for cart operations.
  * Defines all database queries with Room annotations.
- * All methods return Flow<> for reactive, real-time updates when data changes.
+ * All read methods return Flow<> for reactive, real-time updates when data changes.
+ * All write methods are suspend functions for safe background execution.
  *
  * Room automatically implements these abstract methods with SQL under the hood.
  */
@@ -69,6 +70,18 @@ interface CartDao {
      */
     @Update
     suspend fun updateCartItem(item: CartItemEntity): Int
+
+    /**
+     * Updates the quantity of a cart item directly by product ID.
+     * This is more efficient than fetching the entity, modifying it, and updating it,
+     * as it performs a single SQL UPDATE without a preceding SELECT.
+     *
+     * @param productId The product ID whose quantity to update
+     * @param quantity The new quantity value
+     * @return Number of rows affected
+     */
+    @Query("UPDATE cart_items SET quantity = :quantity WHERE productId = :productId")
+    suspend fun updateQuantityByProductId(productId: Int, quantity: Int): Int
 
     /**
      * Deletes a cart item by its product ID.

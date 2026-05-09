@@ -5,16 +5,16 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:gravity="center"
-    android:padding="@dimen/spacing_sm">
+    android:padding="@dimen/spacing_xs">
 
     <com.google.android.material.chip.Chip
-        android:id="@+id/categoryChip"
+        android:id="@+id/categoryName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Category"
         android:textAppearance="?attr/textAppearanceLabelSmall"
-        app:chipBackgroundColor="@drawable/bg_category_selector" />
+        android:checkable="true"
+        app:chipBackgroundColor="@drawable/bg_category_selector"
+        app:chipCornerRadius="@dimen/button_corner_radius"
+        app:chipMinHeight="@dimen/icon_large" />
 
 </LinearLayout>
-
-<!-- This is a simplified layout. In production, use Chip widget properly -->

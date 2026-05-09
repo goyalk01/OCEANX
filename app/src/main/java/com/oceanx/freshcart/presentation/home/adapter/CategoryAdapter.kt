@@ -11,10 +11,10 @@ import com.oceanx.freshcart.databinding.ItemCategoryBinding
 /**
  * RecyclerView adapter for product categories.
  * Displays horizontal scrollable category chips.
- * Uses DiffUtil for efficient list updates.
+ * Uses ListAdapter + DiffUtil for efficient list updates.
  *
- * @param onCategoryClick Callback when a category is tapped
- * @param isSelected Function to check if a category is selected
+ * @param onCategoryClick Callback when a category chip is tapped
+ * @param isSelected Function to check if a category is currently selected
  */
 class CategoryAdapter(
     private val onCategoryClick: (String) -> Unit,
@@ -27,7 +27,7 @@ class CategoryAdapter(
             parent,
             false
         )
-        return CategoryViewHolder(binding, onCategoryClick, isSelected)
+        return CategoryViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: CategoryViewHolder, position: Int) {
@@ -35,30 +35,33 @@ class CategoryAdapter(
     }
 
     inner class CategoryViewHolder(
-        private val binding: ItemCategoryBinding,
-        private val onCategoryClick: (String) -> Unit,
-        private val isSelected: (String) -> Boolean
+        private val binding: ItemCategoryBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 
         init {
             binding.root.setOnClickListener {
-                onCategoryClick(getItem(adapterPosition).name)
+                // Use bindingAdapterPosition instead of deprecated adapterPosition.
+                // bindingAdapterPosition returns the position relative to this adapter,
+                // which is correct when using ConcatAdapter or nested adapters.
+                val position = bindingAdapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    onCategoryClick(getItem(position).name)
+                }
             }
         }
 
         fun bind(category: Category) {
             binding.categoryName.text = category.name
-            
-            // Update background based on selection state
-            val isSelected = isSelected(category.name)
-            binding.root.isSelected = isSelected
-            
-            // Apply styling (could be done via selector drawable)
-            // Selected: filled blue chip
-            // Unselected: outline chip
+
+            // Update visual state based on selection
+            val selected = isSelected(category.name)
+            binding.root.isSelected = selected
         }
     }
 
+    /**
+     * DiffUtil callback for efficient category list updates.
+     */
     private class CategoryDiffCallback : DiffUtil.ItemCallback<Category>() {
         override fun areItemsTheSame(oldItem: Category, newItem: Category): Boolean {
             return oldItem.id == newItem.id

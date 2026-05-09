@@ -11,7 +11,7 @@
     <item>
         <shape android:shape="rectangle">
             <solid android:color="@color/surface" />
-            <stroke android:width="@dimen/spacing_xs" android:color="@color/divider" />
+            <stroke android:width="@dimen/divider_height" android:color="@color/divider" />
             <corners android:radius="@dimen/card_corner_radius" />
         </shape>
     </item>

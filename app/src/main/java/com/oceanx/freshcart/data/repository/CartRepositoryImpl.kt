@@ -13,8 +13,11 @@ import kotlinx.coroutines.flow.map
  *
  * This class:
  * - Receives CartDao for database operations
- * - Receives CartMapper for entity ↔ domain model conversion
+ * - Uses CartMapper for entity ↔ domain model conversion
  * - Implements all CartRepository methods
+ *
+ * All suspend functions are safe to call from any coroutine context;
+ * Room automatically dispatches queries to a background thread.
  *
  * @param cartDao The Data Access Object for cart database operations
  */
@@ -39,25 +42,20 @@ class CartRepositoryImpl(private val cartDao: CartDao) : CartRepository {
         cartDao.insertCartItem(entity)
     }
 
+    /**
+     * Updates the quantity of a cart item using a direct SQL UPDATE query.
+     *
+     * This is significantly more efficient than the previous approach which:
+     * 1. Fetched the entity via Flow
+     * 2. Mapped entity → domain model
+     * 3. Created a copy with new quantity
+     * 4. Mapped domain model → entity
+     * 5. Called updateCartItem()
+     *
+     * Now it's a single SQL: UPDATE cart_items SET quantity = ? WHERE productId = ?
+     */
     override suspend fun updateQuantity(productId: Int, quantity: Int) {
-        val existingItem = cartDao.getCartItemByProductId(productId).map { entity ->
-            entity?.let {
-                CartMapper.entityToDomain(it).copy(quantity = quantity)
-            }
-        }.map { cartItem ->
-            cartItem?.let { CartMapper.domainToEntity(it) }
-        }
-
-        // We need to get the existing item first
-        // In a real scenario, this might be optimized with a direct UPDATE query
-        val currentCartItem = getCartItemByProductId(productId)
-        currentCartItem.collect { item ->
-            if (item != null) {
-                val updatedItem = item.copy(quantity = quantity)
-                val entity = CartMapper.domainToEntity(updatedItem)
-                cartDao.updateCartItem(entity)
-            }
-        }
+        cartDao.updateQuantityByProductId(productId, quantity)
     }
 
     override suspend fun removeCartItem(productId: Int) {

@@ -9,6 +9,10 @@ import com.oceanx.freshcart.data.model.CartItem
  *
  * The domain layer works with CartItem, while the data layer uses CartItemEntity.
  * This mapper bridges the two.
+ *
+ * Provides both:
+ * - Object methods for explicit calls: CartMapper.entityToDomain(entity)
+ * - Extension functions for fluent calls: entity.toDomain()
  */
 object CartMapper {
 
@@ -66,3 +70,27 @@ object CartMapper {
         return cartItems.map { domainToEntity(it) }
     }
 }
+
+// ===== Extension Functions =====
+// These provide a more idiomatic Kotlin API alongside the object methods.
+// Usage: val cartItem = entity.toDomain()
+
+/**
+ * Extension function to convert a CartItemEntity to a CartItem domain model.
+ */
+fun CartItemEntity.toDomain(): CartItem = CartMapper.entityToDomain(this)
+
+/**
+ * Extension function to convert a CartItem domain model to a CartItemEntity.
+ */
+fun CartItem.toEntity(): CartItemEntity = CartMapper.domainToEntity(this)
+
+/**
+ * Extension function to convert a list of entities to domain models.
+ */
+fun List<CartItemEntity>.toDomainList(): List<CartItem> = CartMapper.entitiesToDomain(this)
+
+/**
+ * Extension function to convert a list of domain models to entities.
+ */
+fun List<CartItem>.toEntityList(): List<CartItemEntity> = CartMapper.domainToEntities(this)

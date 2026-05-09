@@ -13,6 +13,7 @@ import com.oceanx.freshcart.presentation.common.UiState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 /**
@@ -20,7 +21,7 @@ import kotlinx.coroutines.launch
  * Manages cart items, bill calculation, and order-related operations.
  *
  * State:
- * - cartItems: List of items in the cart
+ * - cartItems: List of items in the cart (reactive Flow from Room)
  * - billBreakdown: MRP, discount, delivery fee, total
  * - uiState: Loading/Success/Error state
  */
@@ -42,6 +43,8 @@ class CartViewModel(
 
     /**
      * Increase the quantity of a cart item by 1.
+     * @param productId The product to update
+     * @param currentQuantity The current quantity (used to calculate new value)
      */
     fun increaseQuantity(productId: Int, currentQuantity: Int) {
         viewModelScope.launch {
@@ -56,6 +59,8 @@ class CartViewModel(
     /**
      * Decrease the quantity of a cart item by 1.
      * If quantity reaches 0, removes the item from cart.
+     * @param productId The product to update
+     * @param currentQuantity The current quantity
      */
     fun decreaseQuantity(productId: Int, currentQuantity: Int) {
         viewModelScope.launch {
@@ -72,7 +77,8 @@ class CartViewModel(
     }
 
     /**
-     * Remove an item from the cart.
+     * Remove an item from the cart entirely.
+     * @param productId The product ID to remove
      */
     fun removeItem(productId: Int) {
         viewModelScope.launch {
@@ -86,6 +92,7 @@ class CartViewModel(
 
     /**
      * Add an item back to cart (used for undo swipe-to-delete).
+     * @param cartItem The CartItem to re-add
      */
     fun addItemBackToCart(cartItem: CartItem) {
         viewModelScope.launch {
@@ -112,13 +119,11 @@ class CartViewModel(
     }
 
     /**
-     * Get all cart items as a list (not a Flow).
-     * Useful for getting current state in coroutines.
+     * Get all cart items as a snapshot list (not a reactive Flow).
+     * Uses `.first()` to get the current state and return immediately.
+     * Useful for one-time reads inside coroutines.
      */
     suspend fun getCartItemsSnapshot(): List<CartItem> {
-        return cartRepository.getCartItems().let { flow ->
-            // In a real app, would use flow.first()
-            emptyList() // Placeholder
-        }
+        return cartRepository.getCartItems().first()
     }
 }
