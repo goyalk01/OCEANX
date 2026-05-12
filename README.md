@@ -4,22 +4,20 @@ A production-grade Android grocery delivery application built in **100% Kotlin**
 
 ## 📋 Project Overview
 
-**App Name:** FreshCart  
-**Package:** `com.oceanx.freshcart`  
-**Language:** Kotlin (100%)  
-**Minimum SDK:** 21 (Android 5.0 Lollipop)  
-**Target SDK:** 34 (Android 14)  
-**Build System:** Gradle with Kotlin DSL  
-**Architecture:** Clean Architecture + MVVM  
-**UI Framework:** Material Design 3 (XML Layouts)
+- **App Name:** FreshCart
+- **Package:** `com.oceanx.freshcart`
+- **Language:** Kotlin (100%)
+- **Minimum SDK:** 21 (Android 5.0 Lollipop)
+- **Target SDK:** 34 (Android 14)
+- **Build System:** Gradle (Kotlin DSL)
+- **Architecture:** Clean Architecture + MVVM
+- **UI Framework:** Material Design 3 (XML Layouts)
 
 ## 📸 App Showcase
 
-**[🎥 Watch Full App Demo Video Here](https://youtube.com/shorts/placeholder)**
+**[🎥 Watch Full App Demo Video Here](https://drive.google.com/file/d/1S6YWpz1ggwBHJsy_Ui5pYvx7a5Glzvfw/view?usp=sharing)**
 
-| Login Screen | Home Screen | Cart Screen | Checkout Screen | Order Success |
-| :---: | :---: | :---: | :---: | :---: |
-| <img src="https://via.placeholder.com/250x500.png?text=Login" width="180"/> | <img src="https://via.placeholder.com/250x500.png?text=Home" width="180"/> | <img src="https://via.placeholder.com/250x500.png?text=Cart" width="180"/> | <img src="https://via.placeholder.com/250x500.png?text=Checkout" width="180"/> | <img src="https://via.placeholder.com/250x500.png?text=Success" width="180"/> |
+The demo video walks through the full flow from login to order success, including browsing, search, cart updates, and checkout.
 
 ---
 
@@ -317,9 +315,7 @@ adb shell am start -n com.oceanx.freshcart/.presentation.MainActivity
 ```
 
 ### **Sync Dependencies:**
-```bash
-./gradlew sync
-```
+Open the project in Android Studio and allow Gradle sync to complete.
 
 ---
 

@@ -18,6 +18,7 @@
 *.iws
 *.ipr
 local.properties
+*.apk
 
 # IDE-specific files
 .DS_Store
@@ -28,7 +29,6 @@ local.properties
 .gradle/
 .idea/
 build/
-*.apk
 *.ap_
 *.dex
 *.class
@@ -79,6 +79,3 @@ Desktop.ini
 
 # Exclude any extracted gradle distribution directories
 gradle-*/
-
-
-freshcart_review_plan.md

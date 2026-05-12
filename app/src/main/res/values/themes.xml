@@ -37,6 +37,7 @@
     </style>
 
     <!-- Text Appearance Styles -->
+    <style name="TextAppearance.FreshCart" parent="TextAppearance.Material3.BodyMedium" />
     <style name="TextAppearance.FreshCart.HeadlineMedium">
         <item name="android:textSize">@dimen/text_size_headline</item>
         <item name="android:textStyle">bold</item>
@@ -67,7 +68,7 @@
     </style>
 
     <!-- Toolbar Style -->
-    <style name="Widget.FreshCart.AppBarLayout" parent="Widget.Material3.AppBarLayout.Primary">
+    <style name="Widget.FreshCart.AppBarLayout" parent="Widget.Material3.AppBarLayout">
         <item name="android:background">@color/primary</item>
         <item name="elevation">4dp</item>
     </style>

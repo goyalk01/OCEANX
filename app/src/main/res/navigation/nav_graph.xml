@@ -65,16 +65,16 @@
         tools:layout="@layout/fragment_order_success">
         <argument
             android:name="orderId"
-            app:type="string" />
+            app:argType="string" />
         <argument
             android:name="totalAmount"
-            app:type="float" />
+            app:argType="float" />
         <argument
             android:name="deliveryAddress"
-            app:type="string" />
+            app:argType="string" />
         <argument
             android:name="paymentMethod"
-            app:type="string" />
+            app:argType="string" />
         <action
             android:id="@+id/action_orderSuccessFragment_to_homeFragment"
             app:destination="@id/homeFragment"
@@ -83,3 +83,4 @@
     </fragment>
 
 </navigation>
+
